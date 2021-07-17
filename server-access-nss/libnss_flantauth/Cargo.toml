@@ -1,0 +1,35 @@
+[package]
+name = "libnss_flantauth"
+version = "0.1.0"
+authors = ["Yuriy Losev <yuriy.losev@flant.com>"]
+edition = "2018"
+
+[lib]
+name = "nss_flantauth"
+crate-type = ["cdylib"]
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+libc = "0.2.0"
+lazy_static = "1.4.0"
+paste = "0.1"
+libnss = "0.4.0"
+rusqlite = { version = "0.21.0", features = ["bundled"] }
+anyhow = "1"
+
+[dev-dependencies]
+users = "0.9"
+tempfile = "3"
+
+
+[features]
+default = ["rusqlite/bundled"]
+
+# dynamic_paths lets you control where code expects to find the sqlite databases
+# based on each process's environment variables
+dynamic_paths = []
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = 'abort'

@@ -1,0 +1,1 @@
+Libnss module 'flantauth' based on sqlite3 DB
