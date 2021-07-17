@@ -7,7 +7,6 @@ edition = "2018"
 [lib]
 name = "nss_flantauth"
 crate-type = ["cdylib"]
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 libc = "0.2.0"
@@ -23,13 +22,14 @@ tempfile = "3"
 
 
 [features]
-default = ["rusqlite/bundled"]
+default = ["rusqlite/bundled"] # bundled means static linking for sqlite
 
 # dynamic_paths lets you control where code expects to find the sqlite databases
 # based on each process's environment variables
 dynamic_paths = []
 
 [profile.release]
+opt-level = 2 # like '-O2'
 lto = true
 codegen-units = 1
 panic = 'abort'

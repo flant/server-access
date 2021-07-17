@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 ubuntuList=
 ubuntuList="ubuntu:16.04 ubuntu:18.04 ubuntu:20.04 ubuntu:21.04"
 
@@ -16,16 +18,12 @@ centosList="centos:6 centos:7 centos:8"
 if [[ ! -f ./out/libnss_flantauth.so.2 ]] ; then
   echo "build libnss_flantauth.so.2 ..."
 
-  cat <<'EOF' | docker run \
-    -w /src/server-access-nss \
-    -v $(pwd)/../..:/src \
-    -v $(pwd)/out:/out \
-    --rm -i golang:1.15-stretch sh -
-
-./build.sh
-mv libnss_flantauth.so.2 /out
-ldd /out/libnss_flantauth.so.2
-EOF
+../build.sh
+mkdir -p ./out
+mv ../lib/libnss_flantauth.so.2 ./out
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  ldd ./out/libnss_flantauth.so.2
+fi
 else
   echo "libnss_flantauth.so.2 exists, skip building"
 fi
@@ -41,8 +39,8 @@ for image in $debianList $ubuntuList ; do
 image=$1
 
 cp ./out/libnss_flantauth.so.2 /lib/x86_64-linux-gnu/
-mkdir -p /opt/negentropy
-cp ./users.db /opt/negentropy/server-access.db
+mkdir -p /opt/serveraccessd/
+cp ./users.db /opt/serveraccessd/server-accessd.db
 
 sed -i 's/^\(passwd:\s\+\)/\1flantauth /' /etc/nsswitch.conf
 sed -i 's/^\(group:\s\+\)/\1flantauth /' /etc/nsswitch.conf
@@ -68,8 +66,8 @@ for image in $centosList ; do
 image=$1
 
 cp ./out/libnss_flantauth.so.2 /usr/lib64/
-mkdir -p /opt/negentropy
-cp ./users.db /opt/negentropy/server-access.db
+mkdir -p /opt/serveraccessd/
+cp ./users.db /opt/serveraccessd/server-accessd.db
 
 sed -i 's/^\(passwd:\s\+\)/\1flantauth /' /etc/nsswitch.conf
 sed -i 's/^\(group:\s\+\)/\1flantauth /' /etc/nsswitch.conf

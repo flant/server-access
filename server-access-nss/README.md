@@ -1,21 +1,23 @@
 # libnss_flantauth
 
-A library to store users in an sqlite db.
+A library to store users in a sqlite db.
 
 ## Build
 
-```
-CGO_CFLAGS="-g -O2 -D __LIB_NSS_NAME=flantauth" \
-go build \
-   -ldflags="-s -w" \
-   -buildmode=c-shared \
-   -o libnss_flantauth.so.2
+```bash
+./build.sh
 ```
 
-You can change a database path using -X flag:
+#### build and install into /lib/x86_64-linux-gnu/
 
+```bash
+./build.sh install
 ```
--ldflags="-s -w -X 'main.UserDatabasePath=/etc/access/users.db'"
+
+You can change a database path using env variable `NSS_FLANTAUTH_PASSWD_PATH`:
+
+```bash
+export NSS_FLANTAUTH_PASSWD_PATH=/etc/my/sql.db
 ```
 
 
@@ -24,9 +26,9 @@ You can change a database path using -X flag:
 Put libnss_flantauth.so.2 into `/lib/x86_64-linux-gnu` or `/usr/lib64` and add `flantauth` service to `passwd`, `group` and `shadow` databases in nsswitch.conf:
 
 ```
-passwd:   flantauth files
-group:   flantauth files
-shadow:   flantauth files
+passwd:   files flantauth
+group:    files flantauth
+shadow:   files flantauth
 ```
 
 ## Example
