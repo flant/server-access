@@ -28,8 +28,6 @@ pub fn setup() -> io::Result<()> {
         }
     });
 
-    println!("NSS OK HERE");
-
     Ok(())
 }
 

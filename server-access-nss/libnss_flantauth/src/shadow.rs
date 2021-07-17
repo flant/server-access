@@ -42,8 +42,6 @@ fn get_entry_by_name(conn: Connection, name: &str) -> Result<Shadow> {
 }
 
 fn from_row(row: &Row) -> Result<Shadow> {
-    // Default values for each of these are based on `glibc/shadow/sgetspent_r.c`
-
     Ok(Shadow {
         name: row.get(0)?,
         passwd: row.get(1)?,

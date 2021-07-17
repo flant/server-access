@@ -4,8 +4,7 @@ use crate::integration::common;
 use crate::integration::libc::nss;
 
 fn setup() {
-    nss::setup().expect("failed to nss");
-    println!("its ok");
+    nss::setup().expect("failed to setup nss");
 
     static INIT: sync::Once = sync::Once::new();
     common::setup(|conn| {
