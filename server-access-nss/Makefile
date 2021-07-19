@@ -20,5 +20,5 @@ build:
 install: build
 	cp ${ROOT_DIR}/lib/libnss_flantauth.so.2 /lib/x86_64-linux-gnu/
 
-test: build
+test:
 	./example/run.sh

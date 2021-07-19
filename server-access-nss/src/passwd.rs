@@ -5,22 +5,23 @@ use rusqlite::OpenFlags;
 use rusqlite::{params, Connection, Row, NO_PARAMS};
 
 use crate::db::from_result;
-use crate::db::PATH;
+use crate::db::DB_PATH;
 
 pub struct SqlitePasswd;
 libnss_passwd_hooks!(flantauth, SqlitePasswd);
 
 impl PasswdHooks for SqlitePasswd {
     fn get_all_entries() -> Response<Vec<Passwd>> {
-        let entries = Connection::open_with_flags(&PATH as &str, OpenFlags::SQLITE_OPEN_READ_ONLY)
-            .map_err(Into::into)
-            .and_then(get_all_entries);
+        let entries =
+            Connection::open_with_flags(&DB_PATH as &str, OpenFlags::SQLITE_OPEN_READ_ONLY)
+                .map_err(Into::into)
+                .and_then(get_all_entries);
 
         from_result(entries)
     }
 
     fn get_entry_by_uid(uid: libc::uid_t) -> Response<Passwd> {
-        let entry = Connection::open_with_flags(&PATH as &str, OpenFlags::SQLITE_OPEN_READ_ONLY)
+        let entry = Connection::open_with_flags(&DB_PATH as &str, OpenFlags::SQLITE_OPEN_READ_ONLY)
             .map_err(Into::into)
             .and_then(|conn| get_entry_by_uid(conn, uid));
 
@@ -28,7 +29,7 @@ impl PasswdHooks for SqlitePasswd {
     }
 
     fn get_entry_by_name(name: String) -> Response<Passwd> {
-        let entry = Connection::open_with_flags(&PATH as &str, OpenFlags::SQLITE_OPEN_READ_ONLY)
+        let entry = Connection::open_with_flags(&DB_PATH as &str, OpenFlags::SQLITE_OPEN_READ_ONLY)
             .map_err(Into::into)
             .and_then(|conn| get_entry_by_name(conn, &name));
 

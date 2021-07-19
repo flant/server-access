@@ -5,22 +5,23 @@ use rusqlite::OpenFlags;
 use rusqlite::{params, Connection, Row, NO_PARAMS};
 
 use crate::db::from_result;
-use crate::db::PATH;
+use crate::db::DB_PATH;
 
 pub struct SqliteShadow;
 libnss_shadow_hooks!(flantauth, SqliteShadow);
 
 impl ShadowHooks for SqliteShadow {
     fn get_all_entries() -> Response<Vec<Shadow>> {
-        let entries = Connection::open_with_flags(&PATH as &str, OpenFlags::SQLITE_OPEN_READ_ONLY)
-            .map_err(Into::into)
-            .and_then(get_all_entries);
+        let entries =
+            Connection::open_with_flags(&DB_PATH as &str, OpenFlags::SQLITE_OPEN_READ_ONLY)
+                .map_err(Into::into)
+                .and_then(get_all_entries);
 
         from_result(entries)
     }
 
     fn get_entry_by_name(name: String) -> Response<Shadow> {
-        let entry = Connection::open_with_flags(&PATH as &str, OpenFlags::SQLITE_OPEN_READ_ONLY)
+        let entry = Connection::open_with_flags(&DB_PATH as &str, OpenFlags::SQLITE_OPEN_READ_ONLY)
             .map_err(Into::into)
             .and_then(|conn| get_entry_by_name(conn, &name));
 

@@ -14,13 +14,6 @@ make build
 make build install
 ```
 
-You can change a database path using env variable `NSS_FLANTAUTH_PASSWD_PATH`:
-
-```bash
-export NSS_FLANTAUTH_PASSWD_PATH=/etc/my/sql.db
-```
-
-
 ## Installation
 
 Put libnss_flantauth.so.2 into `/lib/x86_64-linux-gnu` or `/usr/lib64` and add `flantauth` service to `passwd`, `group` and `shadow` databases in nsswitch.conf:
