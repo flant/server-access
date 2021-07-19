@@ -1,17 +1,17 @@
 # libnss_flantauth
 
-A library to store users in a sqlite db.
+A library to store users in an sqlite db.
 
 ## Build
 
 ```bash
-./build.sh
+make build
 ```
 
 #### build and install into /lib/x86_64-linux-gnu/
 
 ```bash
-./build.sh install
+make build install
 ```
 
 You can change a database path using env variable `NSS_FLANTAUTH_PASSWD_PATH`:
@@ -31,14 +31,13 @@ group:    files flantauth
 shadow:   files flantauth
 ```
 
-## Example
+## Tet
 
-This repository has `example` folder with simple database and a script:
+You can launch integration test by run:
 
 ```
-cd example
-./run.sh
+make test
 ```
 
-`run.sh` will build libnss_flantauth.so.2 in `out` directory and run different versions of Debian and Ubuntu to test against users.db file.
+it will build libnss_flantauth.so.2 in `out` directory and run different versions of Debian and Ubuntu to test against users.db file.
 
